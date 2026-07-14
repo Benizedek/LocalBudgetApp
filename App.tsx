@@ -3,36 +3,37 @@ import {
   SafeAreaView,
   View,
   Text,
-  FlatList,
   TouchableOpacity,
-  StyleSheet,
   StatusBar,
 } from 'react-native';
 import { styles } from './styles';
-
-// 1. TypeScript interface for a Transaction
-export interface Transaction {
-  id: string;
-  description: string;
-  amount: number; // Negative for expense, positive for income
-  date: string;
-}
+import { Transaction } from './types';
+import Dashboard from './components/Dashboard';
+import TransactionForm from './components/TransactionForm';
+import TransactionList from './components/TransactionList';
 
 function App(): React.JSX.Element {
-  // 2. React state array (transactions) and transaction counter
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [counter, setCounter] = useState<number>(0);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
-  // 3. Add transaction logic (mock expense)
-  const addTransaction = () => {
-    const nextCounter = counter + 1;
-    // Generate a random expense amount between -10.00 and -150.00
-    const randomAmount = -(parseFloat((Math.random() * 140 + 10).toFixed(2)));
+  // Compute dashboard stats
+  const totalExpenses = transactions
+    .filter(transaction => transaction.amount < 0)
+    .reduce((runningTotal, transaction) => runningTotal + transaction.amount, 0);
 
+  const totalAmount = transactions.reduce((runningTotal, transaction) => runningTotal + transaction.amount, 0);
+
+  // Handle new transaction from form
+  const handleAddTransaction = (
+    description: string | null,
+    amount: number,
+    category: string | null,
+  ) => {
     const newTransaction: Transaction = {
-      id: Date.now().toString() + '_' + nextCounter,
-      description: `Transaction #${nextCounter}`,
-      amount: randomAmount,
+      id: Date.now().toString(),
+      description,
+      category,
+      amount,
       date: new Date().toLocaleDateString(undefined, {
         year: 'numeric',
         month: 'short',
@@ -40,32 +41,8 @@ function App(): React.JSX.Element {
       }),
     };
 
-    // Prepend to transactions array
     setTransactions((prev) => [newTransaction, ...prev]);
-    setCounter(nextCounter);
-  };
-
-  // Calculate stats
-  const totalExpenses = transactions.reduce((acc, t) => acc + t.amount, 0);
-  const transactionCount = transactions.length;
-
-  const renderItem = ({ item }: { item: Transaction }) => {
-    return (
-      <View style={styles.transactionCard}>
-        <View style={styles.cardLeft}>
-          <Text style={styles.descriptionText}>{item.description}</Text>
-          <Text style={styles.dateText}>{item.date}</Text>
-        </View>
-        <View style={styles.cardRight}>
-          <Text style={styles.amountText}>
-            {item.amount.toLocaleString(undefined, {
-              style: 'currency',
-              currency: 'USD',
-            })}
-          </Text>
-        </View>
-      </View>
-    );
+    setIsFormOpen(false);
   };
 
   return (
@@ -79,50 +56,39 @@ function App(): React.JSX.Element {
           <Text style={styles.subtitleText}>Windows Desktop Edition</Text>
         </View>
 
-        {/* Dashboard/Summary Section */}
-        <View style={styles.dashboard}>
-          <View style={styles.statBox}>
-            <Text style={styles.statLabel}>Total Expenses</Text>
-            <Text style={[styles.statValue, styles.negativeColor]}>
-              {totalExpenses.toLocaleString(undefined, {
-                style: 'currency',
-                currency: 'USD',
-              })}
-            </Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statLabel}>Logged Transactions</Text>
-            <Text style={styles.statValue}>{transactionCount}</Text>
-          </View>
-        </View>
+        {/* Dashboard Summary */}
+        <Dashboard
+          totalExpenses={totalExpenses}
+          totalAmount={totalAmount}
+        />
 
         {/* Action Button */}
         <TouchableOpacity
           style={styles.addButton}
-          onPress={addTransaction}
+          onPress={() => setIsFormOpen(!isFormOpen)}
           activeOpacity={0.8}
         >
-          <Text style={styles.addButtonText}>+ Add New Transaction</Text>
+          <Text style={styles.addButtonText}>
+            {isFormOpen ? '✕ Close Form' : '+ Add New Transaction'}
+          </Text>
         </TouchableOpacity>
+
+        {/* Conditional Transaction Form */}
+        {isFormOpen && (
+          <>
+            <View style={styles.divider} />
+            <TransactionForm
+              onSubmit={handleAddTransaction}
+              onCancel={() => setIsFormOpen(false)}
+            />
+          </>
+        )}
 
         {/* Divider */}
         <View style={styles.divider} />
 
-        {/* Scrollable Transaction List */}
-        <FlatList
-          data={transactions}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          contentContainerStyle={styles.listContent}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyTextTitle}>No transactions logged</Text>
-              <Text style={styles.emptyTextSubtitle}>
-                Click the button above to add a mock transaction.
-              </Text>
-            </View>
-          }
-        />
+        {/* Transaction List component (this is what renders the items!) */}
+        <TransactionList transactions={transactions} />
       </View>
     </SafeAreaView>
   );
