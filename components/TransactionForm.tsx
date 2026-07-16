@@ -46,7 +46,7 @@ function TransactionForm({ onSubmit, onCancel, initialTransaction }: Transaction
   return (
     <View style={styles.formOverlay}>
       <View style={styles.formContainer}>
-        <Text style={styles.formTitle}>New Transaction</Text>
+        <Text style={styles.formTitle}>{isEditing ? 'Edit Transaction' : 'New Transaction'}</Text>
 
         {/* Toggle Transaction Type */}
         <View style={{ flexDirection: 'row', marginBottom: 16, gap: 8 }}>
@@ -113,7 +113,7 @@ function TransactionForm({ onSubmit, onCancel, initialTransaction }: Transaction
             onPress={handleSubmit}
             activeOpacity={0.8}
           >
-            <Text style={styles.submitButtonText}>Add Transaction</Text>
+            <Text style={styles.submitButtonText}>{isEditing ? 'Save Changes' : 'Add Transaction'}</Text>
           </TouchableOpacity>
         </View>
       </View>

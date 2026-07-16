@@ -104,7 +104,8 @@ function App(): React.JSX.Element {
             <View style={styles.divider} />
             <TransactionForm
               onSubmit={handleAddTransaction}
-              onCancel={() => setIsFormOpen(false)}
+              onCancel={handleCancelForm}
+              initialTransaction={editingTransaction}
             />
           </>
         )}
