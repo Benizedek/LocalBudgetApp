@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Transaction } from '../types';
 import { styles } from '../styles';
 
 interface TransactionCardProps {
   transaction: Transaction;
+  onEdit: (transaction: Transaction) => void;
 }
 
-function TransactionCard({ transaction }: TransactionCardProps): React.JSX.Element {
+function TransactionCard({ transaction, onEdit }: TransactionCardProps): React.JSX.Element {
   const hasDescription = transaction.description != null && transaction.description.trim() !== '';
   const hasCategory = transaction.category != null && transaction.category.trim() !== '';
 
@@ -45,6 +46,19 @@ function TransactionCard({ transaction }: TransactionCardProps): React.JSX.Eleme
             maximumFractionDigits: 2,
           })}
         </Text>
+        <TouchableOpacity
+          onPress={() => onEdit(transaction)}
+          activeOpacity={0.7}
+          style={{
+            paddingVertical: 4,
+            paddingHorizontal: 8,
+            borderRadius: 4,
+            backgroundColor: '#334155',
+            marginTop: 8,
+          }}
+        >
+          <Text style={{ color: '#cbd5e1', fontSize: 11, fontWeight: '600' }}>Edit</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

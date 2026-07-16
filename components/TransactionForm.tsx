@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { styles } from '../styles';
+import { Transaction } from '../types';
 
 interface TransactionFormProps {
   onSubmit: (description: string | null, amount: number, category: string | null, transactionType: 'expense' | 'income') => void;
   onCancel: () => void;
+  initialTransaction?: Transaction | null;
 }
 
-function TransactionForm({ onSubmit, onCancel }: TransactionFormProps): React.JSX.Element {
-  const [description, setDescription] = useState('');
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
+function TransactionForm({ onSubmit, onCancel, initialTransaction }: TransactionFormProps): React.JSX.Element {
+
+  const isEditing = !!initialTransaction;
+
+  const [description, setDescription] = useState(initialTransaction?.description ?? '');
+  const [amount, setAmount] = useState(initialTransaction ? Math.abs(initialTransaction.amount).toString() : '');
+  const [category, setCategory] = useState(initialTransaction?.category ?? '');
   const [amountError, setAmountError] = useState('');
-  const [transactionType, setTransactionType] = useState<'expense' | 'income'>('expense');
+  const [transactionType, setTransactionType] = useState<'expense' | 'income'>(initialTransaction && initialTransaction.amount >= 0 ? 'income' : 'expense');
 
 
   const handleSubmit = () => {

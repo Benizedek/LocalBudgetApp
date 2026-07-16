@@ -15,6 +15,7 @@ import TransactionList from './components/TransactionList';
 function App(): React.JSX.Element {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
 
   // Compute dashboard stats
   const totalExpenses = transactions
@@ -23,26 +24,50 @@ function App(): React.JSX.Element {
 
   const totalAmount = transactions.reduce((runningTotal, transaction) => runningTotal + transaction.amount, 0);
 
-  // Handle new transaction from form
+  // Handle new transaction from form OR updating of a transaction
   const handleAddTransaction = (
     description: string | null,
     amount: number,
     category: string | null,
   ) => {
-    const newTransaction: Transaction = {
-      id: Date.now().toString(),
-      description,
-      category,
-      amount,
-      date: new Date().toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      }),
-    };
-
-    setTransactions((prev) => [newTransaction, ...prev]);
+    if (editingTransaction) {
+      // update mode: map over transaction to replace mathcing target ID
+      setTransactions((prev) =>
+        prev.map((t) =>
+          t.id === editingTransaction.id
+            ? { ...t, description, category, amount }
+            : t
+        )
+      );
+      setEditingTransaction(null);
+    } else {
+      // create new transaction
+      const newTransaction: Transaction = {
+        id: Date.now().toString(),
+        description,
+        category,
+        amount,
+        date: new Date().toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        }),
+      };
+      setTransactions((prev) => [newTransaction, ...prev]);
+    }
     setIsFormOpen(false);
+  };
+
+  // Handle edit button trigger
+  const handleEditTransaction = (transaction: Transaction) => {
+    setEditingTransaction(transaction);
+    setIsFormOpen(true);
+  };
+
+  // Cancel state resets
+  const handleCancelForm = () => {
+    setIsFormOpen(false);
+    setEditingTransaction(null);
   };
 
   return (
@@ -88,7 +113,10 @@ function App(): React.JSX.Element {
         <View style={styles.divider} />
 
         {/* Transaction List component (this is what renders the items!) */}
-        <TransactionList transactions={transactions} />
+        <TransactionList
+          transactions={transactions}
+          onEditTransaction={handleEditTransaction}
+        />
       </View>
     </SafeAreaView>
   );

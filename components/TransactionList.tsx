@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { Transaction } from '../types';
-import { styles } from '../styles'; // Uses your central stylesheet cleanly
+import TransactionCard from './TransactionCard';
+import { styles } from '../styles';
 
 interface TransactionListProps {
   transactions: Transaction[];
+  onEditTransaction: (transaction: Transaction) => void
 }
 
 function TransactionList({ transactions }: TransactionListProps): React.JSX.Element {
