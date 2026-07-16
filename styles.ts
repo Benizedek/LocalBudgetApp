@@ -58,6 +58,9 @@ export const styles = StyleSheet.create({
         marginTop: 8,
         fontFamily: 'Segoe UI',
     },
+    positiveColor: {
+        color: '#10b981', // Emerald Green
+    },
     negativeColor: {
         color: '#f43f5e', // Rose 500
     },
@@ -269,4 +272,95 @@ export const styles = StyleSheet.create({
         fontFamily: 'Segoe UI',
         fontStyle: 'italic',
     },
-});
+
+    // ── Tab Navigation styles ───────────────────────────────────
+    tabContainer: {
+        flexDirection: 'row',
+        backgroundColor: '#1e293b',
+        borderRadius: 8,
+        padding: 4,
+        marginVertical: 12,
+    },
+    tabButton: {
+        flex: 1,
+        paddingVertical: 10,
+        alignItems: 'center',
+        borderRadius: 6,
+    },
+    activeTabButton: {
+        backgroundColor: '#334155',
+    },
+    tabButtonText: {
+        color: '#94a3b8',
+        fontWeight: '600',
+        fontSize: 14,
+    },
+    activeTabButtonText: {
+        color: '#f8fafc',
+    },
+
+    // ── Filter / Dropdown styles ────────────────────────────────
+    filterContainer: {
+        backgroundColor: '#1e293b',
+        borderRadius: 8,
+        padding: 16,
+        marginBottom: 12,
+        zIndex: 1000,
+    },
+    filterLabel: {
+        color: '#94a3b8',
+        fontSize: 12,
+        fontWeight: '600',
+        marginBottom: 4,
+        textTransform: 'uppercase',
+    },
+    dropdownSelector: {
+        backgroundColor: '#0f172a',
+        borderWidth: 1,
+        borderColor: '#334155',
+        borderRadius: 6,
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 12,
+    },
+    dropdownSelectorText: {
+        color: '#f8fafc',
+        fontSize: 14,
+    },
+    dropdownMenu: {
+        backgroundColor: '#0f172a',
+        borderWidth: 1,
+        borderColor: '#334155',
+        borderRadius: 6,
+        marginTop: -8,
+        marginBottom: 12,
+        overflow: 'hidden',
+    },
+    dropdownItem: {
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#1e293b',
+    },
+    dropdownItemText: {
+        color: '#cbd5e1',
+        fontSize: 14,
+    },
+    seedButton: {
+        backgroundColor: '#6366f1',
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 6,
+        marginTop: 10,
+        alignSelf: 'flex-start',
+    },
+    seedButtonText: {
+        color: '#ffffff',
+        fontSize: 13,
+        fontWeight: '600',
+        fontFamily: 'Segoe UI',
+    },
+});
