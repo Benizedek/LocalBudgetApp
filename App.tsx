@@ -3,7 +3,9 @@ import {
   SafeAreaView,
   View,
   Text,
+  TextInput,
   TouchableOpacity,
+  ScrollView,
   StatusBar,
 } from 'react-native';
 import { styles } from './styles';
@@ -19,6 +21,13 @@ function App(): React.JSX.Element {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'filter'>('all');
+
+  // Category management state
+  const [categories, setCategories] = useState<string[]>([
+    'Fitness', 'Groceries', 'Income', 'Education', 'Logistics', 'Utilities',
+  ]);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
 
   // Filter / sort state
   const [sortName, setSortName] = useState<'none' | 'asc' | 'desc'>('none');
@@ -126,17 +135,27 @@ function App(): React.JSX.Element {
           <Text style={styles.titleText}>Local Budget Tracker</Text>
           <Text style={styles.subtitleText}>Windows Desktop Edition</Text>
 
-          {/* Seed button — always visible, appends 10 random transactions */}
-          <TouchableOpacity
-            style={styles.seedButton}
-            onPress={() => {
-              const newItems = generateRandomTransactions(10);
-              setTransactions((prev) => [...prev, ...newItems]);
-            }}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.seedButtonText}>⚡ Seed Mock Data</Text>
-          </TouchableOpacity>
+          {/* Seed + Settings buttons row */}
+          <View style={styles.headerButtonRow}>
+            <TouchableOpacity
+              style={styles.seedButton}
+              onPress={() => {
+                const newItems = generateRandomTransactions(10);
+                setTransactions((prev) => [...prev, ...newItems]);
+              }}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.seedButtonText}>⚡ Seed Mock Data</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.settingsButton}
+              onPress={() => setIsSettingsOpen(true)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.settingsButtonText}>⚙️</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Dashboard Summary */}
@@ -187,6 +206,7 @@ function App(): React.JSX.Element {
                   onSubmit={handleAddTransaction}
                   onCancel={handleCancelForm}
                   initialTransaction={editingTransaction}
+                  categories={categories}
                 />
               </>
             )}
@@ -220,6 +240,60 @@ function App(): React.JSX.Element {
           onEditTransaction={handleEditTransaction}
         />
       </View>
+
+      {/* Settings Modal — Manage Categories */}
+      {isSettingsOpen && (
+        <View style={styles.settingsModalOverlay}>
+          <View style={styles.settingsModalContainer}>
+            <Text style={styles.settingsModalTitle}>Manage Categories</Text>
+
+            {/* Add new category row */}
+            <View style={styles.categoryManagementRow}>
+              <TextInput
+                style={[styles.textInput, { flex: 1, marginBottom: 0 }]}
+                placeholder="New Category..."
+                placeholderTextColor="#475569"
+                value={newCategoryName}
+                onChangeText={setNewCategoryName}
+              />
+              <TouchableOpacity
+                style={[styles.submitButton, { paddingHorizontal: 16, marginTop: 0 }]}
+                onPress={() => {
+                  const name = newCategoryName.trim();
+                  if (name && !categories.includes(name)) {
+                    setCategories([...categories, name]);
+                    setNewCategoryName('');
+                  }
+                }}
+              >
+                <Text style={styles.submitButtonText}>Add</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Category list with delete */}
+            <ScrollView nestedScrollEnabled style={styles.categoryListScroll}>
+              {categories.map((cat) => (
+                <View key={cat} style={styles.categoryRowItem}>
+                  <Text style={styles.categoryRowText}>{cat}</Text>
+                  <TouchableOpacity
+                    onPress={() => setCategories(categories.filter((c) => c !== cat))}
+                  >
+                    <Text style={styles.deleteCategoryButtonText}>Delete</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </ScrollView>
+
+            {/* Close modal */}
+            <TouchableOpacity
+              style={styles.settingsCloseButton}
+              onPress={() => setIsSettingsOpen(false)}
+            >
+              <Text style={styles.settingsCloseButtonText}>Done</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 }

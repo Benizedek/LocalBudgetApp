@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { styles } from '../styles';
 import { Transaction } from '../types';
 
@@ -7,9 +7,10 @@ interface TransactionFormProps {
   onSubmit: (description: string | null, amount: number, category: string | null, transactionType: 'expense' | 'income') => void;
   onCancel: () => void;
   initialTransaction?: Transaction | null;
+  categories: string[];
 }
 
-function TransactionForm({ onSubmit, onCancel, initialTransaction }: TransactionFormProps): React.JSX.Element {
+function TransactionForm({ onSubmit, onCancel, initialTransaction, categories }: TransactionFormProps): React.JSX.Element {
 
   const isEditing = !!initialTransaction;
 
@@ -18,7 +19,7 @@ function TransactionForm({ onSubmit, onCancel, initialTransaction }: Transaction
   const [category, setCategory] = useState(initialTransaction?.category ?? '');
   const [amountError, setAmountError] = useState('');
   const [transactionType, setTransactionType] = useState<'expense' | 'income'>(initialTransaction && initialTransaction.amount >= 0 ? 'income' : 'expense');
-
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
 
   const handleSubmit = () => {
     // Validate amount — must be non-empty and a finite number
@@ -92,13 +93,45 @@ function TransactionForm({ onSubmit, onCancel, initialTransaction }: Transaction
         />
         {amountError ? <Text style={styles.errorText}>{amountError}</Text> : null}
 
-        <TextInput
-          style={styles.textInput}
-          placeholder="Category (optional)"
-          placeholderTextColor="#475569"
-          value={category}
-          onChangeText={setCategory}
-        />
+        {/* Category Dropdown Selector */}
+        <Text style={styles.filterLabel}>Select Category</Text>
+        <TouchableOpacity
+          style={styles.dropdownSelector}
+          onPress={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
+        >
+          <Text style={styles.dropdownSelectorText}>
+            {category ? category : 'No Category selected'}
+          </Text>
+          <Text style={{ fontSize: 10, color: '#64748b' }}>▼</Text>
+        </TouchableOpacity>
+
+        {isCategoryDropdownOpen && (
+          <View style={[styles.dropdownMenu, { maxHeight: 150 }]}>
+            <ScrollView nestedScrollEnabled>
+              <TouchableOpacity
+                style={styles.dropdownItem}
+                onPress={() => {
+                  setCategory('');
+                  setIsCategoryDropdownOpen(false);
+                }}
+              >
+                <Text style={styles.dropdownItemText}>None</Text>
+              </TouchableOpacity>
+              {categories.map((cat) => (
+                <TouchableOpacity
+                  key={cat}
+                  style={styles.dropdownItem}
+                  onPress={() => {
+                    setCategory(cat);
+                    setIsCategoryDropdownOpen(false);
+                  }}
+                >
+                  <Text style={styles.dropdownItemText}>{cat}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        )}
 
         <View style={styles.formActions}>
           <TouchableOpacity
