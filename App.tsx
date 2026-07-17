@@ -15,12 +15,13 @@ import Dashboard from './components/Dashboard';
 import TransactionForm from './components/TransactionForm';
 import TransactionFilters from './components/TransactionFilters';
 import TransactionList from './components/TransactionList';
+import AnalysisView from './components/AnalysisView';
 
 function App(): React.JSX.Element {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
-  const [activeTab, setActiveTab] = useState<'all' | 'filter'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'filter' | 'analysis'>('all');
 
   // Category management state
   const [categories, setCategories] = useState<string[]>([
@@ -182,6 +183,14 @@ function App(): React.JSX.Element {
               Filters
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tabButton, activeTab === 'analysis' && styles.activeTabButton]}
+            onPress={() => setActiveTab('analysis')}
+          >
+            <Text style={[styles.tabButtonText, activeTab === 'analysis' && styles.activeTabButtonText]}>
+              Analysis
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {/* Tab Content: All Transactions */}
@@ -231,14 +240,31 @@ function App(): React.JSX.Element {
           />
         )}
 
-        {/* Divider */}
-        <View style={styles.divider} />
+        {/* Tab Content: Analysis */}
+        {activeTab === 'analysis' && (
+          <AnalysisView
+            transactions={processedTransactions}
+            onEditTransaction={handleEditTransaction}
+            selectedYear={selectedYear}
+            setSelectedYear={setSelectedYear}
+            selectedMonth={selectedMonth}
+            setSelectedMonth={setSelectedMonth}
+            selectedDay={selectedDay}
+            setSelectedDay={setSelectedDay}
+            availableYears={availableYears}
+          />
+        )}
 
-        {/* Transaction List */}
-        <TransactionList
-          transactions={activeTab === 'filter' ? processedTransactions : transactions}
-          onEditTransaction={handleEditTransaction}
-        />
+        {/* Divider + Transaction List — hidden when Analysis tab is active */}
+        {activeTab !== 'analysis' && (
+          <>
+            <View style={styles.divider} />
+            <TransactionList
+              transactions={activeTab === 'filter' ? processedTransactions : transactions}
+              onEditTransaction={handleEditTransaction}
+            />
+          </>
+        )}
       </View>
 
       {/* Settings Modal — Manage Categories */}

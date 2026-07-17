@@ -451,4 +451,95 @@ export const styles = StyleSheet.create({
         fontWeight: '600',
         fontFamily: 'Segoe UI',
     },
+
+    // ── Analysis View styles ────────────────────────────────────
+    analysisContainer: {
+        flexDirection: 'row',
+        flex: 1,
+        gap: 20,
+    },
+    analysisColumn: {
+        flex: 1,
+        gap: 16,
+    },
+    analysisCard: {
+        backgroundColor: '#1e293b',
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: '#334155',
+        padding: 16,
+    },
+    analysisCardTitle: {
+        fontSize: 16,
+        fontWeight: '700',
+        color: '#f8fafc',
+        fontFamily: 'Segoe UI',
+        marginBottom: 12,
+    },
+    analysisEmptyText: {
+        color: '#64748b',
+        textAlign: 'center',
+        paddingVertical: 20,
+        fontFamily: 'Segoe UI',
+    },
+
+    // Bar chart
+    barTrack: {
+        backgroundColor: '#0f172a',
+        borderRadius: 5,
+        height: 10,
+        overflow: 'hidden',
+    },
+    barFill: {
+        height: '100%',
+        borderRadius: 5,
+    },
+
+    // Ring / donut chart
+    ringContainer: {
+        width: 140,
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        marginVertical: 16,
+    },
+    ringBase: {
+        position: 'absolute',
+        width: 140,
+        height: 140,
+        borderRadius: 70,
+        borderWidth: 12,
+        borderColor: '#0f172a',
+    },
+    ringCenterText: {
+        color: '#f8fafc',
+        fontWeight: '800',
+        fontSize: 15,
+        fontFamily: 'Segoe UI',
+    },
+
+    // Legend
+    legendContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        marginTop: 4,
+        gap: 10,
+    },
+    legendItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+    },
+    legendDot: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+    },
+    legendText: {
+        color: '#94a3b8',
+        fontSize: 11,
+        fontFamily: 'Segoe UI',
+    },
 });
