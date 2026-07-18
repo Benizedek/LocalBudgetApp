@@ -4,19 +4,25 @@ import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import DashboardScreen from '../screens/DashboardScreen';
 import TransactionsScreen from '../screens/TransactionsScreen';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuth } from '../context/AuthContext';
 
 const Tab = createMaterialTopTabNavigator();
 
 function AppHeader() {
   const insets = useSafeAreaInsets();
+  const { signOut } = useAuth();
+
   return (
     <View style={{
       backgroundColor: '#0f172a',
       paddingTop: Platform.OS === 'android' ? insets.top + 16 : insets.top + 12,
       paddingBottom: 16,
       paddingHorizontal: 20,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     }}>
       <Text style={{ 
         color: '#f8fafc', 
@@ -26,6 +32,27 @@ function AppHeader() {
       }}>
         Local Budget
       </Text>
+      <TouchableOpacity
+        onPress={signOut}
+        activeOpacity={0.7}
+        style={{
+          paddingVertical: 6,
+          paddingHorizontal: 14,
+          borderRadius: 6,
+          borderWidth: 1,
+          borderColor: '#334155',
+          backgroundColor: '#1e293b',
+        }}
+      >
+        <Text style={{
+          color: '#94a3b8',
+          fontSize: 13,
+          fontWeight: '600',
+          fontFamily: 'Segoe UI',
+        }}>
+          Log Out
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }

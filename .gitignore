@@ -1,9 +1,14 @@
-# OSX
-#
-.DS_Store
+# ── Environment & Secrets ────────────────────────────────────────
+.env
+.env.local
+.env.*.local
 
-# Xcode
-#
+# ── OSX ──────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ── Xcode ────────────────────────────────────────────────────────
 build/
 *.pbxuser
 !default.pbxuser
@@ -22,9 +27,7 @@ DerivedData
 *.xcuserstate
 **/.xcode.env.local
 
-# Android/IntelliJ
-#
-build/
+# ── Android / IntelliJ ──────────────────────────────────────────
 .idea
 .gradle
 local.properties
@@ -35,38 +38,36 @@ local.properties
 !debug.keystore
 .kotlin/
 
-# node.js
-#
+# ── Node.js ─────────────────────────────────────────────────────
 node_modules/
 npm-debug.log
 yarn-error.log
 
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
-# screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/
+# ── Expo ─────────────────────────────────────────────────────────
+.expo/
+dist/
+web-build/
 
+# ── Fastlane ────────────────────────────────────────────────────
 **/fastlane/report.xml
 **/fastlane/Preview.html
 **/fastlane/screenshots
 **/fastlane/test_output
 
-# Bundle artifact
+# ── Bundle artifacts ────────────────────────────────────────────
 *.jsbundle
 
-# Ruby / CocoaPods
+# ── Ruby / CocoaPods ────────────────────────────────────────────
 **/Pods/
 /vendor/bundle/
 
-# Temporary files created by Metro to check the health of the file watcher
+# ── Metro ────────────────────────────────────────────────────────
 .metro-health-check*
 
-# testing
+# ── Testing ──────────────────────────────────────────────────────
 /coverage
 
-# Yarn
+# ── Yarn ─────────────────────────────────────────────────────────
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
@@ -74,4 +75,12 @@ yarn-error.log
 !.yarn/sdks
 !.yarn/versions
 
-.expo/
+# ── Windows / Visual Studio ─────────────────────────────────────
+.vs/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db
+ehthumbs.db

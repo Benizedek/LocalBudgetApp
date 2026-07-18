@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, useWindowDimensions } from 'react-native';
+import { View, ScrollView, useWindowDimensions, ActivityIndicator } from 'react-native';
 import { Dashboard } from '../components/Dashboard';
 import AnalysisCharts from '../components/AnalysisCharts';
 import CompactFilter from '../components/CompactFilter';
@@ -7,6 +7,7 @@ import { useTransactionContext } from '../context/TransactionContext';
 
 export default function DashboardScreen(): React.JSX.Element {
   const {
+    loading,
     totalIncome, totalExpenses, netMargin,
     processedTransactions,
     filterState, setFilterState,
@@ -15,6 +16,14 @@ export default function DashboardScreen(): React.JSX.Element {
 
   const { width } = useWindowDimensions();
   const layoutPadding = width > 768 ? 24 : 16;
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#0f172a' }}>
+        <ActivityIndicator size="large" color="#3b82f6" />
+      </View>
+    );
+  }
 
   return (
     <ScrollView 
