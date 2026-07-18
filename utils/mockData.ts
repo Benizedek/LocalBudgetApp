@@ -8,7 +8,7 @@ const descriptions = [
   'Freelance Coding Payment', 'Starbucks Coffee', 'SaaS Subscription', 'Zelle Transfer'
 ];
 
-const categories = ['Fitness', 'Groceries', 'Income', 'Education', 'Logistics', 'Utilities', 'Coding', 'Food', 'Entertainment'];
+const expenseCategories = ['Fitness', 'Groceries', 'Education', 'Logistics', 'Utilities', 'Coding', 'Food', 'Entertainment'];
 
 export function generateRandomTransactions(count: number): Transaction[] {
   const generated: Transaction[] = [];
@@ -19,9 +19,9 @@ export function generateRandomTransactions(count: number): Transaction[] {
       : -parseFloat((Math.random() * 250 + 5).toFixed(2));
 
     const randomDesc = descriptions[Math.floor(Math.random() * descriptions.length)];
-    const randomCat = isIncome ? 'Income' : categories[Math.floor(Math.random() * categories.length)];
+    const randomCat = isIncome ? 'Income' : expenseCategories[Math.floor(Math.random() * expenseCategories.length)];
 
-    const year = Math.floor(Math.random() * (2026 - 2024 + 1)) + 2024;
+    const year = new Date().getFullYear();
     const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
     const day = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0');
 
