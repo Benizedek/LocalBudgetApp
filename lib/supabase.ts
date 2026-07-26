@@ -4,20 +4,12 @@ import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+// These are safe to hardcode directly: the anon/publishable key is meant to be
+// public-facing. Row Level Security policies protect your data, not this key.
+const supabaseUrl = 'https://qtssbwxslpkkkbymszac.supabase.co';
+const supabaseAnonKey = 'sb_publishable_ji0lr9YW1GLBCG1fmVSkhg_EEfr0JbV';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    'Missing Supabase environment variables.\n' +
-    'Create a .env file in the project root with:\n' +
-    '  EXPO_PUBLIC_SUPABASE_URL=https://your-project-url.supabase.co\n' +
-    '  EXPO_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key\n' +
-    'See .env.example for reference.',
-  );
-}
-
-export const supabase = createClient(supabaseUrl!, supabaseAnonKey!, {
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage: AsyncStorage,
     autoRefreshToken: true,
