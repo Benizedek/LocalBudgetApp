@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, useWindowDimensions, FlatList, ActivityIndicator } from 'react-native';
 import { useTransactionContext } from '../context/TransactionContext';
 import TransactionCard from '../components/TransactionCard';
@@ -16,19 +16,10 @@ export default function TransactionsScreen(): React.JSX.Element {
     selectedMonth, setSelectedMonth,
     processedTransactions,
     handleAddTransaction, handleEditTransaction, handleCancelForm,
-    seedTransactions,
   } = useTransactionContext();
-
-  const [seeding, setSeeding] = useState(false);
 
   const { width } = useWindowDimensions();
   const layoutPadding = width > 768 ? 24 : 16;
-
-  const handleSeed = async () => {
-    setSeeding(true);
-    await seedTransactions(10);
-    setSeeding(false);
-  };
 
   if (loading) {
     return (
@@ -40,21 +31,9 @@ export default function TransactionsScreen(): React.JSX.Element {
 
   const renderHeader = () => (
     <>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+      <View style={{ marginBottom: 16 }}>
         <TouchableOpacity
-          style={[styles.seedButton, { flex: 1, marginRight: 8, opacity: seeding ? 0.6 : 1 }]}
-          onPress={handleSeed}
-          disabled={seeding}
-          activeOpacity={0.8}
-        >
-          {seeding ? (
-            <ActivityIndicator color="#fff" size="small" />
-          ) : (
-            <Text style={styles.seedButtonText}>⚡ Seed Data</Text>
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.addButton, { flex: 1, marginLeft: 8 }]}
+          style={styles.addButton}
           onPress={() => setIsFormOpen(!isFormOpen)}
           activeOpacity={0.8}
         >
@@ -75,9 +54,9 @@ export default function TransactionsScreen(): React.JSX.Element {
         </View>
       )}
 
-      <CompactFilter 
-        filterState={filterState} 
-        setFilterState={setFilterState} 
+      <CompactFilter
+        filterState={filterState}
+        setFilterState={setFilterState}
         selectedMonth={selectedMonth}
         setSelectedMonth={setSelectedMonth}
       />

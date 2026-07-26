@@ -84,3 +84,5 @@ web-build/
 *.sw?
 Thumbs.db
 ehthumbs.db
+
+.vercel
